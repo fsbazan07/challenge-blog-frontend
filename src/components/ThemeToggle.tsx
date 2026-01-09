@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
+import { MdLightMode, MdDarkMode } from "react-icons/md";
 
 type Theme = "light" | "dark";
 const KEY = "theme";
 
 function getInitialTheme(): Theme {
+  // Si llega a renderizar en SSR algún día, evitamos window/localStorage
+  if (typeof window === "undefined") return "light";
+
   const saved = localStorage.getItem(KEY);
   if (saved === "light" || saved === "dark") return saved;
-  return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+
+  return window.matchMedia?.("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
 }
 
 function applyTheme(theme: Theme) {
@@ -17,29 +24,43 @@ function applyTheme(theme: Theme) {
 }
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>(() => getInitialTheme());
 
+  // Aplicar tema cada vez que cambie (incluye el inicial)
   useEffect(() => {
-    const t = getInitialTheme();
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setTheme(t);
-    applyTheme(t);
-  }, []);
+    applyTheme(theme);
+  }, [theme]);
+
+  const isDark = theme === "dark";
 
   function toggle() {
-    const next: Theme = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    applyTheme(next);
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   }
 
   return (
     <button
       type="button"
       onClick={toggle}
-      className="rounded-md border border-slate-200 px-3 py-2 text-sm hover:bg-slate-100 dark:border-slate-800 dark:hover:bg-slate-900"
       aria-label="Cambiar tema"
+      className="
+        relative inline-flex h-9 w-16 items-center
+        rounded-full border border-border
+        bg-muted transition-colors hover:bg-accent
+      "
     >
-      {theme === "dark" ? "☾ Oscuro" : "☀ Claro"}
+      <span
+        className={`
+          absolute left-1 flex h-7 w-7 items-center justify-center
+          rounded-full bg-background shadow-sm transition-transform
+          ${isDark ? "translate-x-7" : "translate-x-0"}
+        `}
+      >
+        {isDark ? (
+          <MdDarkMode className="h-4 w-4 text-foreground" />
+        ) : (
+          <MdLightMode className="h-4 w-4 text-foreground" />
+        )}
+      </span>
     </button>
   );
 }
