@@ -1,7 +1,86 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* =========================
+   Brand tokens (HEX)
+   ========================= */
 
 :root {
-  color-scheme: light dark;
+  --radius: 14px;
+
+  /* Light */
+  --background: #f5f6f8;            /* fondo suave */
+  --foreground: #0b1220;            /* texto principal */
+
+  --card: #ffffff;                  /* tarjetas */
+  --card-foreground: #0b1220;
+
+  --popover: #ffffff;
+  --popover-foreground: #0b1220;
+
+  --primary: #2563eb;               /* azul principal (botón) */
+  --primary-foreground: #ffffff;
+
+  --secondary: #eef2ff;             /* superf. secundaria */
+  --secondary-foreground: #0b1220;
+
+  --muted: #f1f5f9;                 /* hover suave */
+  --muted-foreground: #64748b;      /* texto secundario */
+
+  --accent: #e8efff;                /* acento suave */
+  --accent-foreground: #0b1220;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --ring: #2563eb;
+}
+
+/* Dark */
+.dark {
+  --background: #1e2744;            /* navy profundo */
+  --foreground: #e5e7eb;            /* texto claro */
+
+  --card: #111a2e;                  /* panel/tarjeta dark */
+  --card-foreground: #e5e7eb;
+
+  --popover: #111a2e;
+  --popover-foreground: #e5e7eb;
+
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+
+  --secondary: #0f172a;             /* superf secundaria */
+  --secondary-foreground: #e5e7eb;
+
+  --muted: #1a2440;                 /* hover dark “glass” */
+  --muted-foreground: #94a3b8;
+
+  --accent: #1f2a4a;
+  --accent-foreground: #e5e7eb;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --border: #233152;                /* bordes sutiles */
+  --input: #233152;
+  --ring: #3b82f6;                  /* ring un poco más vivo en dark */
+}
+
+/* Base */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+button,
+input,
+textarea {
+  font: inherit;
 }
