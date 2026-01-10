@@ -6,13 +6,16 @@ import MyPosts from "./pages/MyPosts";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import LoginLayout from "./features/layout/components/LoginLayout";
 
 export default function App() {
   return (
     <Routes>
       {/* Public */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      <Route element={<LoginLayout/>}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Route>
 
       {/* Layout */}
       <Route element={<Layout />}>
