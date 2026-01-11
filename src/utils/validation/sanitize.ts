@@ -18,3 +18,7 @@ export function sanitizeEmail(value: string): string {
   // no “valida”, solo evita espacios
   return value.replace(/\s/g, "");
 }
+
+export function sanitizePassword(value: string): string {
+  return value.replace(/[^A-Za-z0-9!@#$%^&*()_\-+=\\[\]{}|;:,.?/]/g, "");
+}

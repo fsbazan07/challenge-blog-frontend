@@ -4,6 +4,7 @@ import {
   REGEX_EMAIL,
   REGEX_ONLY_LETTERS,
   REGEX_ONLY_NUMBERS,
+  REGEX_PASSWORD_SAFE,
 } from "./regex";
 
 export function isOnlyLetters(value: string): boolean {
@@ -29,4 +30,14 @@ export function isAlphaNumericSpaces(value: string): boolean {
 export function isEmail(value: string): boolean {
   const v = value.trim();
   return v.length === 0 ? false : REGEX_EMAIL.test(v);
+}
+
+export function isPasswordValid(value: string): boolean {
+  const v = value.trim();
+
+  if (v.length === 0) return false;
+  if (v.length < 8) return false;
+  if (v.length > 72) return false;
+
+  return REGEX_PASSWORD_SAFE.test(v);
 }
