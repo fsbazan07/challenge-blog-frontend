@@ -5,6 +5,7 @@ import {
   sanitizeEmail,
   sanitizeOnlyLetters,
   sanitizeOnlyNumbers,
+  sanitizePassword,
 } from "./sanitize";
 
 // Teclas que SI deben permitirse (navegación / edición)
@@ -82,5 +83,9 @@ export const guards = {
     // permitimos caracteres típicos de email
     (c) => /[A-Za-z0-9@._+-]/.test(c),
     sanitizeEmail
+  ),
+  isPasswordValid: makeGuard(
+    (c) => /^[A-Za-z0-9!@#$%^&*()_\-+=\\[\]{}|;:,.?/]$/.test(c),
+    sanitizePassword
   ),
 };
