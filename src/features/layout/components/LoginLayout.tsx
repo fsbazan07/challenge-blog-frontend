@@ -1,16 +1,16 @@
 import { Link, Outlet } from "react-router-dom";
 import Footer from "../components/Footer";
-import { ThemeToggle } from "../../../components/ThemeToggle";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function LoginLayout() {
   return (
-   <div className="relative h-screen ">
+    <div className="relative h-screen ">
       {/* Header flotante arriba */}
       <header className="absolute left-0 top-0 z-20 w-full">
         <div className="flex items-center justify-between px-6 py-4">
           <Link to="/" className="md:flex items-center gap-2 ">
             <img
-              src="/src/assets/MyBlog.png"
+              src="src/assets/MyBlog.png"
               alt="MyBlog"
               className="h-14 drop-shadow-md md:block hidden"
             />

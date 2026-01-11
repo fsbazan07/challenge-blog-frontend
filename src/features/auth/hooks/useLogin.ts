@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthService } from "@/services/auth/auth.service";
+import type { ApiError } from "@/services/http/types";
 
 type System = {
   email: string;
@@ -35,19 +37,19 @@ export function useLogin() {
     setIsSubmitting(true);
 
     try {
-      // TODO: conectar API real
-      // validación simple
       if (!email.trim() || !password.trim()) {
         throw new Error("Completá email y contraseña.");
       }
-
-      // fake delay
-      await new Promise((r) => setTimeout(r, 500));
-
-      // TODO: set auth context / token
+      const res = await AuthService.login({ email, password });
+      AuthService.saveSession(res.accessToken);
       navigate("/feed");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al iniciar sesión.");
+      const apiErr = err as ApiError;
+      const msg = Array.isArray(apiErr.message)
+        ? apiErr.message.join(", ")
+        : apiErr.message;
+
+      setError(msg || "Error inesperado");
     } finally {
       setIsSubmitting(false);
     }
