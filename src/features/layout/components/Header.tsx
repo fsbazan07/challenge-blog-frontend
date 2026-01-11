@@ -1,8 +1,8 @@
 import { Link, NavLink } from "react-router-dom";
 import { useHeader } from "../hooks/useHeader";
-import { ThemeToggle } from "../../../components/ThemeToggle";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { MdMenu } from "react-icons/md";
-import Button from "../../../components/ui/Button";
+import Button from "@/components/ui/Button";
 
 export default function Header() {
   const { system, actions } = useHeader();

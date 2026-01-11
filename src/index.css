@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@config "../tailwind.config.js";
 
 /* =========================
    Brand tokens (HEX)
@@ -8,7 +9,7 @@
   --radius: 14px;
 
   /* Light */
-  --background: #f5f6f8;            /* fondo suave */
+  --background: #d9dee9;            /* fondo suave */
   --foreground: #0b1220;            /* texto principal */
 
   --card: #ffffff;                  /* tarjetas */
@@ -42,7 +43,7 @@
   --background: #1e2744;            /* navy profundo */
   --foreground: #e5e7eb;            /* texto claro */
 
-  --card: #111a2e;                  /* panel/tarjeta dark */
+  --card: #121c33;                  /* panel/tarjeta dark */
   --card-foreground: #e5e7eb;
 
   --popover: #111a2e;
