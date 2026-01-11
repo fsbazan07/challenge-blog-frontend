@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "@/services/auth/auth.service";
 import type { ApiError } from "@/services/http/types";
+import { isEmail } from "@/utils/validation";
 
 type System = {
   email: string;
@@ -10,6 +11,8 @@ type System = {
   remember: boolean;
   isSubmitting: boolean;
   error: string | null;
+  emailError: string | null;
+  passwordError: string | null;
 };
 
 type Actions = {
@@ -29,17 +32,50 @@ export function useLogin() {
   const [remember, setRemember] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+
+  function validate(): boolean {
+    let ok = true;
+
+    const e = email.trim();
+    const p = password;
+
+    setEmailError(null);
+    setPasswordError(null);
+
+    if (!e) {
+      setEmailError("El email es requerido.");
+      ok = false;
+    } else if (!isEmail(e)) {
+      setEmailError("Ingresá un email válido.");
+      ok = false;
+    }
+
+    if (!p.trim()) {
+      setPasswordError("La contraseña es requerida.");
+      ok = false;
+    } else if (p.length < 8) {
+      setPasswordError("Debe tener al menos 8 caracteres.");
+      ok = false;
+    } else if (p.length > 72) {
+      setPasswordError("La contraseña es demasiado larga.");
+      ok = false;
+    }
+
+    return ok;
+  }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   async function submit(e?: React.FormEvent) {
     e?.preventDefault();
+    if (isSubmitting) return;
     setError(null);
     setIsSubmitting(true);
+    const ok = validate();
+    if (!ok) return;
 
     try {
-      if (!email.trim() || !password.trim()) {
-        throw new Error("Completá email y contraseña.");
-      }
       const res = await AuthService.login({ email, password });
       AuthService.saveSession(res.accessToken);
       navigate("/feed");
@@ -56,19 +92,45 @@ export function useLogin() {
   }
 
   const system: System = useMemo(
-    () => ({ email, password, showPassword, remember, isSubmitting, error }),
-    [email, password, showPassword, remember, isSubmitting, error]
+    () => ({
+      email,
+      password,
+      showPassword,
+      remember,
+      isSubmitting,
+      error,
+      emailError,
+      passwordError,
+    }),
+    [
+      email,
+      password,
+      showPassword,
+      remember,
+      isSubmitting,
+      error,
+      emailError,
+      passwordError,
+    ]
   );
 
   const actions: Actions = useMemo(
     () => ({
-      setEmail,
-      setPassword,
+      setEmail: (v: string) => {
+        setEmail(v);
+        if (emailError) setEmailError(null);
+        if (error) setError(null);
+      },
+      setPassword: (v: string) => {
+        setPassword(v);
+        if (passwordError) setPasswordError(null);
+        if (error) setError(null);
+      },
       toggleShowPassword: () => setShowPassword((s) => !s),
       toggleRemember: () => setRemember((s) => !s),
       submit,
     }),
-    [submit]
+    [submit, emailError, passwordError, error]
   );
 
   return { system, actions };

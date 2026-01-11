@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Button from "@/components/ui/Button";
 import { useLogin } from "../hooks/useLogin";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
+import { guards } from "@/utils/validation";
 
 export default function LoginForm() {
   const { system, actions } = useLogin();
@@ -14,12 +15,17 @@ export default function LoginForm() {
             Iniciar sesión
           </h1>
 
-          <form className="mt-6 space-y-4 flex flex-col gap-4" onSubmit={actions.submit}>
+          <form
+            className="mt-6 space-y-4 flex flex-col gap-4"
+            onSubmit={actions.submit}
+          >
             {/* Email */}
             <div className="space-y-1.5">
               <label className="text-sm text-muted-foreground">Email</label>
               <input
                 value={system.email}
+                {...guards.email}
+                aria-invalid={!!system.emailError}
                 onChange={(e) => actions.setEmail(e.target.value)}
                 type="email"
                 autoComplete="email"
@@ -27,6 +33,9 @@ export default function LoginForm() {
                 className="w-full rounded-xl border border-border bg-muted px-4 py-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
               />
             </div>
+            {system.emailError && (
+              <p className="text-sm text-destructive">{system.emailError}</p>
+            )}
 
             {/* Password */}
             <div className="space-y-1.5">
@@ -55,6 +64,11 @@ export default function LoginForm() {
                   )}
                 </button>
               </div>
+              {system.passwordError && (
+                <p className="text-sm text-destructive">
+                  {system.passwordError}
+                </p>
+              )}
             </div>
 
             {/* Remember */}
