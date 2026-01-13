@@ -16,7 +16,7 @@ export default function Feed() {
           title="Feed"
           subtitle="Explorá posts de la comunidad y descubrí nuevas ideas."
           rightSlot={
-            <Link to="/posts/new">
+            <Link to="/myposts/new">
               <Button variant="primary">Crear post</Button>
             </Link>
           }

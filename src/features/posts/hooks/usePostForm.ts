@@ -1,7 +1,11 @@
 import { useMemo, useState } from "react";
 import type { Actions, System } from "../../../services/posts/post.types";
+import { normalizeApiError } from "@/services/http/errors";
+import { PostsService } from "@/services/posts/posts.services";
+import { useNavigate } from "react-router-dom";
 
 export function usePostForm() {
+  const navigate = useNavigate();
   // ---------------------------
   // form fields
   // ---------------------------
@@ -95,8 +99,26 @@ export function usePostForm() {
     if (coverPreviewUrl) URL.revokeObjectURL(coverPreviewUrl);
     setCoverPreviewUrl(URL.createObjectURL(file));
   }
-  
 
+  function resetForm() {
+    setTitle("");
+    setExcerpt("");
+    setContent("");
+    setTagsInput("");
+    setTags([]);
+
+    setError(null);
+    setTitleError(null);
+    setContentError(null);
+
+    // cover
+    if (coverPreviewUrl) URL.revokeObjectURL(coverPreviewUrl);
+    setCoverFile(null);
+    setCoverPreviewUrl(null);
+    setCoverError(null);
+    setIsDraggingCover(false);
+    navigate("/myposts");
+  }
   // ---------------------------
   // actions
   // ---------------------------
@@ -135,11 +157,29 @@ export function usePostForm() {
         setIsDraggingCover(false);
       },
 
-      // estos dos quedan para conectar con PostsService desde la page,
-      // o si querés después los convertimos a actions que reciban callbacks
-      saveDraft: () => {
+      saveDraft: async () => {
         setError(null);
-        console.log("draft", { title, excerpt, content, tags, coverUrl });
+        const ok = validate();
+        if (!ok) return;
+
+        setIsSubmitting(true);
+        try {
+          await PostsService.create({
+            title: title.trim(),
+            content: content.trim(),
+            excerpt: excerpt.trim() || undefined,
+            tags,
+            status: "draft",
+            cover: coverFile,
+          });
+        } catch (e) {
+          setError(
+            normalizeApiError(e).message ?? "No se pudo guardar el borrador."
+          );
+        } finally {
+          setIsSubmitting(false);
+          resetForm();
+        }
       },
 
       publish: async () => {
@@ -149,17 +189,30 @@ export function usePostForm() {
 
         setIsSubmitting(true);
         try {
-          console.log("publish", { title, excerpt, content, tags, coverUrl });
-        } catch {
-          setError("No se pudo publicar. Intentá de nuevo.");
+          await PostsService.create({
+            title: title.trim(),
+            content: content.trim(),
+            excerpt: excerpt.trim() || undefined,
+            tags,
+            status: "published",
+            cover: coverFile,
+          });
+
+          // opcional: limpiar / navegar a /my-posts o al detail si el backend devuelve id
+        } catch (e) {
+          setError(
+            normalizeApiError(e).message ??
+              "No se pudo publicar. Intentá de nuevo."
+          );
         } finally {
           setIsSubmitting(false);
+          resetForm();
         }
       },
     }),
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [title, excerpt, content, tags, coverUrl, coverPreviewUrl]
+    [setCoverImage, validate, title, content, excerpt, tags, coverFile]
   );
 
   // ---------------------------

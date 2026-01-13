@@ -8,6 +8,9 @@ type Props = {
   createdAt?: string | null;
   coverUrl?: string | null;
   tags?: string[];
+
+  status?: "draft" | "published";
+  showStatus?: boolean;
 };
 
 export default function PostCard({
@@ -18,9 +21,25 @@ export default function PostCard({
   createdAt,
   coverUrl,
   tags = [],
+  status,
+  showStatus = false,
 }: Props) {
   return (
-    <article className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm dark:shadow-black/20">
+    <article className=" relative overflow-hidden rounded-2xl border border-border bg-card shadow-sm dark:shadow-black/20">
+      {showStatus && status && (
+        <span
+          className={[
+            "absolute right-3 top-3 z-10 rounded-full px-3 py-1 text-xs font-medium",
+            "backdrop-blur bg-black/40 text-white",
+            status === "published"
+              ? "ring-1 ring-emerald-400/40"
+              : "ring-1 ring-amber-400/40",
+          ].join(" ")}
+        >
+          {status === "published" ? "Publicado" : "Borrador"}
+          
+        </span>
+      )}
       {coverUrl ? (
         <img src={coverUrl} alt="" className="h-44 w-full object-cover" />
       ) : (

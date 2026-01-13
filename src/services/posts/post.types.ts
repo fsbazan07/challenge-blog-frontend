@@ -20,6 +20,7 @@ export type System = {
   coverPreviewUrl: string | null;
   coverError: string | null;
   isDraggingCover: boolean;
+  
 };
 
 export type Actions = {
@@ -35,8 +36,8 @@ export type Actions = {
   onCoverDragOver: (e: React.DragEvent) => void;
   onCoverDragEnter: (e: React.DragEvent) => void;
   onCoverDragLeave: (e: React.DragEvent) => void;
-  saveDraft: () => void;
-  publish: () => void;
+  saveDraft: () => Promise<void>;
+  publish: () => Promise<void>;
 };
 
 export type PostStatus = "draft" | "published" | "deleted";
@@ -146,7 +147,6 @@ export type MyPostsSystem = {
   confirmOpen: boolean;
   isDeleting: boolean;
   selectedPostId: string | null;
-
 };
 
 export type MyPostsActions = {
@@ -168,5 +168,4 @@ export type MyPostsActions = {
   openConfirm: (postId: string) => void;
   closeConfirm: () => void;
   deletePost: () => Promise<void>;
-  
 };

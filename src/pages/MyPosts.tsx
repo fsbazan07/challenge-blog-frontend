@@ -17,7 +17,7 @@ export default function MyPosts() {
           title="Mis posts"
           subtitle="Creá, editá y administrá tu contenido."
           rightSlot={
-            <Link to="/posts/new">
+            <Link to="/myposts/new">
               <Button variant="primary">Crear post</Button>
             </Link>
           }
@@ -46,6 +46,8 @@ export default function MyPosts() {
                 createdAt={p.created_at}
                 coverUrl={resolveCover(p.coverUrl) ?? ""}
                 tags={p.tags ?? []}
+                status={p.status as "draft" | "published"}
+                showStatus={true}
               />
 
               {/* acciones (maquetado) */}
