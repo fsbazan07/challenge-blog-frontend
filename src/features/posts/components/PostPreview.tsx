@@ -1,4 +1,4 @@
-import type { Props } from "../types/post.types";
+import type { Props } from "../../../services/posts/post.types";
 
 export default function PostPreview({ system }: Props) {
   return (

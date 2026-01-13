@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react";
-import type { Actions, System } from "../types/post.types";
-
+import type { Actions, System } from "../../../services/posts/post.types";
 
 export function usePostForm() {
+  // ---------------------------
+  // form fields
+  // ---------------------------
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
@@ -10,16 +12,25 @@ export function usePostForm() {
   const [tags, setTags] = useState<string[]>([]);
   const [coverUrl, setCoverUrl] = useState("");
 
+  // ---------------------------
+  // ui state
+  // ---------------------------
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [titleError, setTitleError] = useState<string | null>(null);
   const [contentError, setContentError] = useState<string | null>(null);
 
+  // ---------------------------
+  // cover state
+  // ---------------------------
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(null);
   const [coverError, setCoverError] = useState<string | null>(null);
   const [isDraggingCover, setIsDraggingCover] = useState(false);
 
+  // ---------------------------
+  // helpers
+  // ---------------------------
   function syncTags(raw: string) {
     const list = raw
       .split(",")
@@ -59,6 +70,7 @@ export function usePostForm() {
   function setCoverImage(file: File | null) {
     setCoverError(null);
 
+    // clear
     if (!file) {
       setCoverFile(null);
       if (coverPreviewUrl) URL.revokeObjectURL(coverPreviewUrl);
@@ -83,41 +95,26 @@ export function usePostForm() {
     if (coverPreviewUrl) URL.revokeObjectURL(coverPreviewUrl);
     setCoverPreviewUrl(URL.createObjectURL(file));
   }
+  
 
+  // ---------------------------
+  // actions
+  // ---------------------------
   const actions: Actions = useMemo(
     () => ({
       setTitle,
       setExcerpt,
       setContent,
+
       setTagsInput: (v) => {
         setTagsInput(v);
         syncTags(v);
       },
       removeTag: (t) => setTags((prev) => prev.filter((x) => x !== t)),
+
       setCoverUrl,
-      saveDraft: () => {
-        setError(null);
-        // luego: llamar endpoint draft
-        console.log("draft", { title, excerpt, content, tags, coverUrl });
-      },
-      publish: async () => {
-        setError(null);
-        const ok = validate();
-        if (!ok) return;
 
-        setIsSubmitting(true);
-        try {
-          // luego: llamar endpoint posts
-          console.log("publish", { title, excerpt, content, tags, coverUrl });
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (e) {
-          setError("No se pudo publicar. Intentá de nuevo.");
-        } finally {
-          setIsSubmitting(false);
-        }
-      },
       setCoverFromInput: (file?: File) => setCoverImage(file ?? null),
-
       clearCover: () => setCoverImage(null),
 
       onCoverDrop: (e: React.DragEvent) => {
@@ -126,24 +123,48 @@ export function usePostForm() {
         const file = e.dataTransfer.files?.[0];
         if (file) setCoverImage(file);
       },
-
       onCoverDragOver: (e: React.DragEvent) => {
         e.preventDefault();
       },
-
       onCoverDragEnter: (e: React.DragEvent) => {
         e.preventDefault();
         setIsDraggingCover(true);
       },
-
       onCoverDragLeave: (e: React.DragEvent) => {
         e.preventDefault();
         setIsDraggingCover(false);
       },
+
+      // estos dos quedan para conectar con PostsService desde la page,
+      // o si querés después los convertimos a actions que reciban callbacks
+      saveDraft: () => {
+        setError(null);
+        console.log("draft", { title, excerpt, content, tags, coverUrl });
+      },
+
+      publish: async () => {
+        setError(null);
+        const ok = validate();
+        if (!ok) return;
+
+        setIsSubmitting(true);
+        try {
+          console.log("publish", { title, excerpt, content, tags, coverUrl });
+        } catch {
+          setError("No se pudo publicar. Intentá de nuevo.");
+        } finally {
+          setIsSubmitting(false);
+        }
+      },
     }),
-    [title, excerpt, content, tags, coverUrl]
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [title, excerpt, content, tags, coverUrl, coverPreviewUrl]
   );
 
+  // ---------------------------
+  // system
+  // ---------------------------
   const system: System = useMemo(
     () => ({
       title,
@@ -152,10 +173,12 @@ export function usePostForm() {
       tagsInput,
       tags,
       coverUrl,
+
       isSubmitting,
       error,
       titleError,
       contentError,
+
       coverFile,
       coverPreviewUrl,
       coverError,
