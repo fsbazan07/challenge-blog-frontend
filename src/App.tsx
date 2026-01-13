@@ -22,7 +22,7 @@ export default function App() {
       <Route element={<Layout />}>
         <Route path="/" element={<Navigate to="/feed" replace />} />
         <Route path="/feed" element={<Feed />} />
-        <Route path="/myposts/:id" element={<MyPosts />} />
+        <Route path="/myposts" element={<MyPosts />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/myposts/:id/new" element={<CreatePost />} />
         <Route path="/myposts/:postId/edit" element={<CreatePost />} />

@@ -1,5 +1,5 @@
-const ACCESS_KEY = "accessToken";
-const REFRESH_KEY = "refreshToken";
+const ACCESS_KEY = "access_token";
+const REFRESH_KEY = "refresh_token";
 
 export const tokenStorage = {
   getAccess() {

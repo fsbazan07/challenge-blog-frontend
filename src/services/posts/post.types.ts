@@ -107,7 +107,7 @@ export type FeedSystem = {
   limit: number;
   total: number;
   totalPages: number;
-  
+
   q: string;
   tag: string;
 
@@ -129,4 +129,44 @@ export type FeedActions = {
   fetch: () => Promise<void>;
   refresh: () => Promise<void>;
   clearFilters: () => void;
+};
+
+export type MyPostsSystem = {
+  items: Post[];
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+
+  q: string;
+  tag: string;
+
+  isLoading: boolean;
+  error: ApiError | null;
+  confirmOpen: boolean;
+  isDeleting: boolean;
+  selectedPostId: string | null;
+
+};
+
+export type MyPostsActions = {
+  setQ: (v: string) => void;
+  setTag: (v: string) => void;
+
+  setPage: (v: number) => void;
+  setLimit: (v: number) => void;
+
+  goToPage: (p: number) => void;
+  nextPage: () => void;
+  prevPage: () => void;
+
+  fetch: () => Promise<void>;
+  refresh: () => Promise<void>;
+
+  clearFilters: () => void;
+
+  openConfirm: (postId: string) => void;
+  closeConfirm: () => void;
+  deletePost: () => Promise<void>;
+  
 };
