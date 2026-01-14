@@ -25,7 +25,7 @@ export default function App() {
         <Route path="/myposts" element={<MyPosts />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/myposts/new" element={<CreatePost />} />
-        <Route path="/myposts/:postId/edit" element={<CreatePost />} />
+        <Route path="/myposts/:id/edit" element={<CreatePost />} />
       </Route>
     </Routes>
   );

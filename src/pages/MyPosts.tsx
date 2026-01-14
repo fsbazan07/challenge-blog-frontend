@@ -1,7 +1,9 @@
 import Button from "@/components/ui/Button";
 import ConfirmModal from "@/components/ui/ConfirmModal";
+
 import Pagination from "@/components/ui/Pagination";
 import PostCard from "@/features/posts/components/PostCard";
+
 import { PostToolbar } from "@/features/posts/components/PostToolbar";
 import { useMyPosts } from "@/features/posts/hooks/useMyPosts";
 import { resolveCover } from "@/services/posts/posts.assets";
@@ -10,6 +12,7 @@ import { Link } from "react-router-dom";
 
 export default function MyPosts() {
   const { system, actions } = useMyPosts();
+
   return (
     <div className="px-4 py-8">
       <div className="mx-auto w-full max-w-6xl space-y-6">
@@ -52,11 +55,14 @@ export default function MyPosts() {
 
               {/* acciones (maquetado) */}
               <div className="flex gap-2">
-                <Link to={`/posts/${p.id}/edit`} className="w-full">
-                  <Button variant="secondary" className="w-full">
-                    Editar
-                  </Button>
-                </Link>
+                {p.status === "draft" && (
+                  <Link to={`/myposts/${p.id}/edit`} className="w-full">
+                    <Button variant="secondary" className="w-full">
+                      Editar
+                    </Button>
+                  </Link>
+                )}
+
                 <Button
                   variant="secondary"
                   className="w-full"

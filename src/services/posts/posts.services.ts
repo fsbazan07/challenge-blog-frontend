@@ -1,5 +1,11 @@
 import { http } from "../http/client";
-import type { CreatePostRequest, ListPostsParams, Paginated, Post, UpdatePostRequest } from "./post.types";
+import type {
+  CreatePostRequest,
+  ListPostsParams,
+  Paginated,
+  Post,
+  UpdatePostRequest,
+} from "./post.types";
 
 export const PostsService = {
   // ---------------------------
@@ -66,6 +72,11 @@ export const PostsService = {
 
   async remove(postId: string): Promise<{ ok: true }> {
     const { data } = await http.delete<{ ok: true }>(`/posts/${postId}`);
+    return data;
+  },
+  
+  async getById(postId: string): Promise<Post> {
+    const { data } = await http.get<Post>(`/posts/${postId}`);
     return data;
   },
 };

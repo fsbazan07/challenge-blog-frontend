@@ -4,6 +4,9 @@ export type Props = {
   system: System;
   actions: Actions;
 };
+export type PostPreviewProps = {
+  system: System;
+};
 
 export type System = {
   title: string;
@@ -20,7 +23,9 @@ export type System = {
   coverPreviewUrl: string | null;
   coverError: string | null;
   isDraggingCover: boolean;
-  
+  mode: "create" | "edit";
+  postId: string | null;
+  isLoading: boolean;
 };
 
 export type Actions = {
@@ -38,6 +43,10 @@ export type Actions = {
   onCoverDragLeave: (e: React.DragEvent) => void;
   saveDraft: () => Promise<void>;
   publish: () => Promise<void>;
+  resetForm: () => void;
+  hydrateFromPost: (p: Post) => void;
+  loadForEdit: (id: string) => Promise<void>;
+  update: () => Promise<void>;
 };
 
 export type PostStatus = "draft" | "published" | "deleted";

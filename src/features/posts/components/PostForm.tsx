@@ -145,19 +145,24 @@ export default function PostForm({ system, actions }: Props) {
         </div>
 
         {/* Actions */}
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-          <Button type="button" variant="secondary" onClick={actions.saveDraft}>
-            Guardar borrador
-          </Button>
+        {system.mode === "edit" ? (
           <Button
-            type="button"
             variant="primary"
+            onClick={actions.update}
             disabled={system.isSubmitting}
-            onClick={actions.publish}
           >
-            {system.isSubmitting ? "Publicando..." : "Publicar"}
+            {system.isSubmitting ? "Guardando..." : "Guardar cambios"}
           </Button>
-        </div>
+        ) : (
+          <>
+            <Button variant="secondary" onClick={actions.saveDraft}>
+              Guardar borrador
+            </Button>
+            <Button variant="primary" onClick={actions.publish}>
+              Publicar
+            </Button>
+          </>
+        )}
       </div>
     </section>
   );

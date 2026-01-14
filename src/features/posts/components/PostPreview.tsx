@@ -1,6 +1,6 @@
-import type { Props } from "../../../services/posts/post.types";
+import type { PostPreviewProps } from "../../../services/posts/post.types";
 
-export default function PostPreview({ system }: Props) {
+export default function PostPreview({ system }: PostPreviewProps) {
   return (
     <aside className="w-full rounded-2xl bg-card shadow-xl dark:shadow-black/30">
       <div className="p-6 sm:p-8 space-y-4">
