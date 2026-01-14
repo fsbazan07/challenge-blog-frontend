@@ -2,6 +2,7 @@ import Button from "@/components/ui/Button";
 import { resolveCover } from "@/services/posts/posts.assets";
 import type { Post } from "@/services/posts/post.types";
 import { Link } from "react-router-dom";
+import { formatAR } from "@/utils/helpers/dateFormat";
 
 type Props = {
   post: Post;
@@ -31,7 +32,7 @@ export default function PostDetailLayout({ post }: Props) {
           <div className="text-sm text-muted-foreground">
             <span>{authorName ? `Por ${authorName}` : "—"}</span>
             {post.created_at ? <span className="mx-2">•</span> : null}
-            <span>{post.created_at ?? ""}</span>
+            <span>{formatAR(post.created_at)}</span>
           </div>
 
           {/* excerpt */}

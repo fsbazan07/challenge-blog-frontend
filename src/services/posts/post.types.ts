@@ -57,7 +57,7 @@ export type PostAuthor = {
   email: string;
 };
 
-export type Post = {
+export type PostApi = {
   id: string;
   title: string;
   excerpt: string | null;
@@ -66,7 +66,13 @@ export type Post = {
   tags: string[];
   status: PostStatus;
   created_at: string;
+  updated_at: string;
   author: PostAuthor | null;
+};
+
+export type Post = Omit<PostApi, "created_at" | "updated_at"> & {
+  created_at: Date;
+  updated_at: Date;
 };
 
 export type Paginated<T> = {
