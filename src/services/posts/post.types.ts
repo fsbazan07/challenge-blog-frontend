@@ -178,3 +178,14 @@ export type MyPostsActions = {
   closeConfirm: () => void;
   deletePost: () => Promise<void>;
 };
+
+export type PostDetailSystem = {
+  post: Post | null;
+  isLoading: boolean;
+  error: ApiError | null; // usás ApiError en otros hooks, mantenemos consistencia
+};
+
+export type PostDetailActions = {
+  fetch: (id: string) => Promise<void>;
+  reset: () => void;
+};

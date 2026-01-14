@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import LoginLayout from "./features/layout/components/LoginLayout";
 import CreatePost from "./pages/CreatePost";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import PostDetail from "./pages/PostDetail";
 
 export default function App() {
   return (
@@ -22,6 +23,8 @@ export default function App() {
       {/* Layout */}
       <Route element={<Layout />}>
         <Route path="/" element={<Navigate to="/feed" replace />} />
+        <Route path="/feed" element={<Feed />} />
+        <Route path="/posts/:id" element={<PostDetail />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/myposts" element={<MyPosts />} />
@@ -29,7 +32,6 @@ export default function App() {
           <Route path="/myposts/new" element={<CreatePost />} />
           <Route path="/myposts/:id/edit" element={<CreatePost />} />
         </Route>
-        <Route path="/feed" element={<Feed />} />
       </Route>
     </Routes>
   );

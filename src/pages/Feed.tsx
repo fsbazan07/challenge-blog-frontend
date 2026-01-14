@@ -22,7 +22,7 @@ export default function Feed() {
           }
         />
 
-        <div className="flex flex-col gap-3 sm:flex-row">
+        <div className="flex flex-col gap-3 py-3 sm:flex-row">
           <input
             placeholder="Buscar por título, tags..."
             value={system.q}
