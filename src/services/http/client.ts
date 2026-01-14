@@ -5,6 +5,7 @@ import axios, {
 } from "axios";
 import { tokenStorage } from "./storage";
 import { normalizeApiError } from "./errors";
+import type { RefreshResponse } from "./types";
 
 const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000/api";
 
@@ -44,19 +45,23 @@ async function refreshAccessToken(): Promise<string | null> {
   const refreshToken = tokenStorage.getRefresh();
   if (!refreshToken) return null;
 
-  const res = await axios.post(
-    `${BASE_URL}/auth/refresh`,
-    { refreshToken },
-    { timeout: 15000 }
-  );
+  try {
+    const res = await axios.post<RefreshResponse>(
+      `${BASE_URL}/auth/refresh`,
+      { refreshToken },
+      { timeout: 15000, headers: { "Content-Type": "application/json" } }
+    );
 
-  const newAccess = res.data?.accessToken as string | undefined;
-  const newRefresh = res.data?.refreshToken as string | undefined;
+    const { accessToken, refreshToken: newRefresh } = res.data;
 
-  if (newAccess) tokenStorage.setAccess(newAccess);
-  if (newRefresh) tokenStorage.setRefresh(newRefresh);
+    tokenStorage.setAccess(accessToken);
+    tokenStorage.setRefresh(newRefresh);
 
-  return newAccess ?? null;
+    return accessToken;
+  } catch (e) {
+    // si falla refresh, no lo dejes “crudo”
+    throw normalizeApiError(e);
+  }
 }
 
 http.interceptors.response.use(

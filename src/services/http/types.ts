@@ -13,3 +13,8 @@ export type ApiError = {
   message: string;
   details?: unknown;
 };
+
+export type RefreshResponse = {
+  accessToken: string;
+  refreshToken: string;
+};
