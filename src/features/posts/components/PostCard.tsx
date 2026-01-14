@@ -6,7 +6,7 @@ type Props = {
   title: string;
   excerpt?: string | null;
   authorName?: string | null;
-  createdAt?: string | null;
+  createdAt?: string | null | Date;
   coverUrl?: string | null;
   tags?: string[];
 
