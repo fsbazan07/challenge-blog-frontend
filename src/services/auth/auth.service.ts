@@ -39,7 +39,7 @@ export const AuthService = {
     return data;
   },
 
-  // TODO: implementar un endpoint /auth/me para validar token + traer user:
+
   async me(): Promise<AuthUser> {
     const { data } = await http.get<MeResponse>("/auth/me");
     return data.user;
@@ -69,8 +69,6 @@ export const AuthService = {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
   },
-
-  // TODO: “logout” local ( agregar endpoint server-side)
 
   async logout(): Promise<void> {
     await http.post("/auth/logout");
