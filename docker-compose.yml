@@ -2,4 +2,4 @@ services:
   web:
     build: .
     ports:
-      - "4173:80"
+      - "5173:80"

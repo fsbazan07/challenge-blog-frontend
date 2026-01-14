@@ -4,8 +4,20 @@ import type {
   ListPostsParams,
   Paginated,
   Post,
+  PostApi,
   UpdatePostRequest,
 } from "./post.types";
+
+const mapPost = (p: PostApi): Post => ({
+  ...p,
+  created_at: new Date(p.created_at),
+  updated_at: new Date(p.updated_at),
+});
+
+const mapPaginated = (data: Paginated<PostApi>): Paginated<Post> => ({
+  ...data,
+  items: data.items.map(mapPost),
+});
 
 export const PostsService = {
   // ---------------------------
@@ -13,17 +25,15 @@ export const PostsService = {
   // ---------------------------
 
   async listFeed(params?: ListPostsParams): Promise<Paginated<Post>> {
-    const { data } = await http.get<Paginated<Post>>("/posts", {
-      params,
-    });
-    return data;
+    const { data } = await http.get<Paginated<PostApi>>("/posts", { params });
+    return mapPaginated(data);
   },
 
   async listMine(params?: ListPostsParams): Promise<Paginated<Post>> {
-    const { data } = await http.get<Paginated<Post>>("/posts/me", {
+    const { data } = await http.get<Paginated<PostApi>>("/posts/me", {
       params,
     });
-    return data;
+    return mapPaginated(data);
   },
 
   async create(payload: CreatePostRequest): Promise<Post> {
@@ -37,25 +47,23 @@ export const PostsService = {
     if (payload.tags?.length) fd.append("tags", payload.tags.join(","));
     if (payload.cover) fd.append("cover", payload.cover);
 
-    const { data } = await http.post<Post>("/posts", fd, {
+    const { data } = await http.post<PostApi>("/posts", fd, {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
-    return data;
+    return mapPost(data);
   },
 
   async update(postId: string, payload: UpdatePostRequest): Promise<Post> {
     const fd = new FormData();
 
     if (payload.title !== undefined) fd.append("title", payload.title);
-
     if (payload.content !== undefined) fd.append("content", payload.content);
 
     if (payload.excerpt !== undefined)
       fd.append("excerpt", payload.excerpt ?? "");
 
     if (payload.status !== undefined) fd.append("status", payload.status);
-
     if (payload.tags !== undefined) fd.append("tags", payload.tags.join(","));
 
     if (payload.removeCover !== undefined)
@@ -63,20 +71,20 @@ export const PostsService = {
 
     if (payload.cover) fd.append("cover", payload.cover);
 
-    const { data } = await http.patch<Post>(`/posts/${postId}`, fd, {
+    const { data } = await http.patch<PostApi>(`/posts/${postId}`, fd, {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
-    return data;
+    return mapPost(data);
   },
 
   async remove(postId: string): Promise<{ ok: true }> {
     const { data } = await http.delete<{ ok: true }>(`/posts/${postId}`);
     return data;
   },
-  
+
   async getById(postId: string): Promise<Post> {
-    const { data } = await http.get<Post>(`/posts/${postId}`);
-    return data;
+    const { data } = await http.get<PostApi>(`/posts/${postId}`);
+    return mapPost(data);
   },
 };
