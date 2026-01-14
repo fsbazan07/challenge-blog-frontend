@@ -1,3 +1,4 @@
+import { formatAR } from "@/utils/helpers/dateFormat";
 import { Link } from "react-router-dom";
 
 type Props = {
@@ -37,7 +38,6 @@ export default function PostCard({
           ].join(" ")}
         >
           {status === "published" ? "Publicado" : "Borrador"}
-          
         </span>
       )}
       {coverUrl ? (
@@ -72,7 +72,7 @@ export default function PostCard({
 
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <span>{authorName ? `Por ${authorName}` : "—"}</span>
-          <span>{createdAt || ""}</span>
+          <span>{formatAR(createdAt as string)}</span>
         </div>
       </div>
     </article>

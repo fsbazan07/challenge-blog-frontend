@@ -73,14 +73,19 @@ export default function Header() {
 
         {/* Right */}
         <div className="flex items-center gap-2">
-          <div className="hidden md:block p-0.5">
-            <ThemeToggle />
-          </div>
-
           {system.isAuthenticated ? (
-            <Button variant="outline" size="sm" onClick={actions.onLogoutClick}>
-              Salir
-            </Button>
+            <div className="flex items-center gap-2">
+              <span className="hidden sm:inline text-sm text-muted-foreground">
+                ¡Hola {system.userName}!
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={actions.onLogoutClick}
+              >
+                Salir
+              </Button>
+            </div>
           ) : (
             <Link to="/login" onClick={actions.closeMobileMenu}>
               <Button variant="outline" size="sm">
@@ -88,6 +93,9 @@ export default function Header() {
               </Button>
             </Link>
           )}
+          <div className="hidden md:block p-0.5">
+            <ThemeToggle />
+          </div>
         </div>
       </div>
 
@@ -95,6 +103,19 @@ export default function Header() {
       {system.isMobileMenuOpen && (
         <div className="bg-background md:hidden">
           <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-3">
+            {system.isAuthenticated ? (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">
+                  ¡Hola {system.userName}!
+                </span>
+              </div>
+            ) : (
+              <Link to="/login" onClick={actions.closeMobileMenu}>
+                <Button variant="outline" size="sm">
+                  Ingresar
+                </Button>
+              </Link>
+            )}
             <Link
               to="/feed"
               className="rounded-md px-3 py-2 text-sm text-foreground hover:bg-muted transition-colors"

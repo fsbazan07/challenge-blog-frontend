@@ -19,25 +19,21 @@ export const AuthService = {
     console.log("Login response data:", data);
     if (data.accessToken) this.saveSession(data.accessToken, data.refreshToken);
 
-
     return data;
   },
 
   async register(payload: RegisterRequest): Promise<LoginResponse> {
     const { data } = await http.post<LoginResponse>("/auth/register", payload);
     if (data.accessToken) this.saveSession(data.accessToken, data.refreshToken);
-    
 
     return data;
   },
 
-  // TODO: implementar refresh endpoint:
-  async refresh(
-    refreshToken: string
-  ): Promise<Pick<LoginResponse, "accessToken" | "refreshToken">> {
-    const { data } = await http.post<
-      Pick<LoginResponse, "accessToken" | "refreshToken">
-    >("/auth/refresh", { refreshToken });
+  async refresh(refreshToken: string) {
+    const { data } = await http.post<{
+      accessToken: string;
+      refreshToken: string;
+    }>("/auth/refresh", { refreshToken });
 
     if (data.accessToken) this.saveSession(data.accessToken, data.refreshToken);
     return data;
@@ -75,7 +71,9 @@ export const AuthService = {
   },
 
   // TODO: “logout” local ( agregar endpoint server-side)
-  logout() {
+
+  async logout(): Promise<void> {
+    await http.post("/auth/logout");
     this.clearSession();
   },
 };
