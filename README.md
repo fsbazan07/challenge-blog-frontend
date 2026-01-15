@@ -169,6 +169,9 @@ pnpm test:run   # tests
 
 ---
 
+## IMPORTANTE
+Una vez levantado el proyecto de frontend y backend, registrarse como usuario nuevo, generar posts para visualizarlos en feed y my posts
+
 ## 👩‍💻 Autora
 
 Florencia Samanta Bazan

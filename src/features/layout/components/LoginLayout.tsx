@@ -1,6 +1,8 @@
 import { Link, Outlet } from "react-router-dom";
 import Footer from "../components/Footer";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import logo from "@/assets/MyBlog.png";
+import loginLayout from "@/assets/LoginImage.jpg";
 
 export default function LoginLayout() {
   return (
@@ -10,7 +12,7 @@ export default function LoginLayout() {
         <div className="flex items-center justify-between px-6 py-4">
           <Link to="/" className="md:flex items-center gap-2 ">
             <img
-              src="src/assets/MyBlog.png"
+              src={logo}
               alt="MyBlog"
               className="h-14 drop-shadow-md md:block hidden"
             />
@@ -24,7 +26,7 @@ export default function LoginLayout() {
         {/* Columna izquierda: imagen */}
         <div className="relative hidden md:block">
           <img
-            src="/src/assets/LoginImage.jpg"
+            src={loginLayout}
             alt="Login visual"
             className="h-full w-full object-cover"
           />
