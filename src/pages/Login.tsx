@@ -1,4 +1,5 @@
 import LoginForm from "../features/auth/componets/LoginForms";
+import mylogo from "@/assets/MyBlog.png";
 
 export default function Login() {
   return (
@@ -6,7 +7,7 @@ export default function Login() {
       <div className="flex flex-col justify-center items-center gap-4">
         <div className="text-center flex flex-col justify-center gap-4">
           <img
-            src="src/assets/MyBlog.png"
+            src={mylogo}
             alt="Challenge Blog"
             className="mx-auto h-20"
           />
