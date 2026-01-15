@@ -3,8 +3,10 @@ import { useHeader } from "../hooks/useHeader";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { MdMenu } from "react-icons/md";
 import Button from "@/components/ui/Button";
+import logo from "@/assets/MyBlog.png";
 
 export default function Header() {
+ 
   const { system, actions } = useHeader();
 
   return (
@@ -32,7 +34,7 @@ export default function Header() {
 
           <Link to="/feed" className="text-sm font-semibold tracking-tight">
             <img
-              src="src/assets/MyBlog.png"
+              src={logo}
               alt="MyBlog"
               className="h-16 drop-shadow-md"
             />
