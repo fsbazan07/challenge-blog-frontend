@@ -56,9 +56,6 @@ pnpm install
 
 Crear un archivo `.env` basado en `.env.example`:
 
-```env
-VITE_API_URL=http://localhost:3000
-```
 
 4. Levantar el proyecto
 
